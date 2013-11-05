@@ -95,12 +95,17 @@ class Doctrine_Template_Geolocatable extends Doctrine_Template
     }
   }
 
-  public function addDistanceQueryTableProxy($query, $latitude, $longitude, $distance = null)
+  public function addDistanceQueryTableProxy($query, $latitude, $longitude, $distance = null, $alias = null)
   {
     $distanceUnit   = $this->_options['distance_unit'];
     $latField       = $this->_options['columns']['latitude']['name'];
     $lngField       = $this->_options['columns']['longitude']['name'];
-    $a              = $query->getRootAlias();
+    
+    if ($alias != null)
+      $a = $alias;
+    else
+      $a              = $query->getRootAlias();
+    
     $factor         = $this->_options['distance_unit'] == 'miles' ? '1.1515' : '1.1515 * 1.609344';
 
     $select = sprintf(
