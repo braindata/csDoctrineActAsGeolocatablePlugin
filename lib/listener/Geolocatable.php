@@ -28,6 +28,7 @@ class Doctrine_Template_Listener_Geolocatable extends Doctrine_Record_Listener
   public function __construct(array $options)
   {
     $this->_options = $options;
+    $this->use_geocoding = sfConfig::get('app_use_geocoding', true);
   }
 
 
@@ -40,9 +41,11 @@ class Doctrine_Template_Listener_Geolocatable extends Doctrine_Record_Listener
    */
   public function preInsert(Doctrine_Event $event)
   {
-    $event
-      ->getInvoker()
-      ->refreshGeocodes();
+    if ($this->use_geocoding){
+      $event
+        ->getInvoker()
+        ->refreshGeocodes();
+    }
   }
   
   /**
@@ -54,12 +57,14 @@ class Doctrine_Template_Listener_Geolocatable extends Doctrine_Record_Listener
    */
   public function preSave(Doctrine_Event $event)
   {
-    $object = $event->getInvoker();
+    if ($this->use_geocoding){
+      $object = $event->getInvoker();
 
-    $modified = array_keys($object->getModified());
-    if (array_intersect($this->_options['fields'], $modified))
-    {
-      $object->refreshGeocodes();
+      $modified = array_keys($object->getModified());
+      if (array_intersect($this->_options['fields'], $modified))
+      {
+        $object->refreshGeocodes();
+      }
     }
   }
 }
