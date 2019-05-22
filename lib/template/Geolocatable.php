@@ -70,8 +70,8 @@ class Doctrine_Template_Geolocatable extends Doctrine_Template
       
       $this->hasColumn($name, $options['type'], $options['length'], $options['options']);
     }
-    
-    $this->addListener(new Doctrine_Template_Listener_Geolocatable($this->_options));
+
+    //$this->addListener(new Doctrine_Template_Listener_Geolocatable($this->_options));
   }
 
 
